@@ -13,6 +13,7 @@ Adding a [parity bit](https://en.wikipedia.org/wiki/Parity_bit) to a binary stri
 In the context of RISC Zero's receipts, the relevance of Reed-Solomon codes is quite a bit more nuanced than the standard error correction use cases. The error amplification of Reed-Solomon encoding provides cryptographic soundness to RISC Zero's computational receipts. During the process of generating a receipt, any errors in the trace are _amplified_ by the process of arithmetization. This error amplification means that even a single error in the execution trace can be easily identified.
 
 ## Suggested Reading and Videos
+- [Slides](https://drive.google.com/file/d/1p0AZ3E4kLIDmFslW_c47YGb-EgeXc_YZ/view), recording (coming soon), and [practice problems](https://drive.google.com/file/d/1JtzBGxz1c-PDVIIRmWa85_A22NS9dlL-/view?usp=share_link) from RISC Zero Study Club
 - 3blue1brown has two videos that offer a great introduction to error correcting codes: [Part 1](https://www.youtube.com/watch?v=X8jsijhllIA) and [Part 2](https://www.youtube.com/watch?v=b3NxrZOu_CE&t=0s).
 - Mary Wootters has a fantastic course on Algebraic Coding Theory. The [YouTube](https://www.youtube.com/playlist?list=PLkvhuSoxwjI_UudECvFYArvG0cLbFlzSr) and the [course website](https://web.stanford.edu/class/cs250/) are both great resources. 
   - [Reed-Solomon Lesson](https://www.youtube.com/watch?v=yQkEnde2lNg&list=PLkvhuSoxwjI_UudECvFYArvG0cLbFlzSr&index=16)
