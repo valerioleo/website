@@ -109,6 +109,10 @@ const config = {
                 href: 'https://twitter.com/risczero',
               },
               {
+                label: 'YouTube',
+                href: 'https://www.youtube.com/channel/UCGTjxHYsjntewyKue85u41A'
+              },
+              {
                 label: 'Stack Overflow',
                 href: 'https://stackoverflow.com/questions/tagged/risczero',
               },
