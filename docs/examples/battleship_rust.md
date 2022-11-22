@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Battleship on RISC Zero
 
-*Revised June 1, 2022*
+*Edit (Nov 2022): There have been breaking changes to NEAR integration since we built this demo; we're leaving this example up, but builders beware that we're not able to provide a whole lot of support for this example at the moment. Thank you for your understanding.*
 
 *In this document, we introduce a **secure, decentralized version** of* [Battleship](https://en.wikipedia.org/wiki/Battleship_(game)), *using Rust and* [RISC Zero's zkVM](https://github.com/risc0/risc0). *To play Battleship on the NEAR network, check out the* [Github README](https://github.com/risc0/battleship-example).
 
