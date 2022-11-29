@@ -45,21 +45,6 @@ module.exports = {
       ]
     },
     { type: 'category',
-      label: 'Battleship',
-      items: [
-        {
-          type: 'doc',
-          label: 'Understanding Battleship',
-          id: 'examples/battleship_rust',
-        },
-        {
-          type: 'link',
-          label: 'Battleship Source',
-          href: 'https://github.com/risc0/battleship-example',
-        }
-      ]
-    },
-    { type: 'category',
       label: 'Digital Signatures',
       items: [
         {

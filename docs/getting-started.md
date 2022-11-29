@@ -16,8 +16,6 @@ If you're new to the RISC Zero zkVM, these examples and explanations will get yo
 
 For more ideas about what's possible with RISC Zero, take a look at these examples, which feature explanations and tutorials for code available in our GitHub repositories:
 
-* [**RISC Zero Battleship**](examples/battleship_rust.md) - To see a more complex use of the RISC Zero zkVM in action, take a look at this working Battleship game. Here, players use private game board states to track whether opponents have sunk their battleships.
-
 * [**RISC Zero Digital Signatures**](examples/digital_signatures.md) - In this example, you'll see how to verifiably sign code run inside the RISC Zero zkVM. This example features a post-quantum digital signature generated using only SHA-2 as a cryptographic primitive.
 
 * [**RISC Zero Password Validity Checker**](examples/password_checker.md) - In this example, you'll see Alice convince Bob's Identity Service that her password meets Bob's validity requirements. This example makes use of public shared outputs that Alice can write to the RISC Zero zkVM's `journal`.
