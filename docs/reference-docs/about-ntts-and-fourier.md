@@ -27,7 +27,11 @@ When an array is written in evaluation form, there's an implicit choice $g\in\ma
 The polynomial associated with the array $(u_0,u_1,\ldots,u_{n-1})$ is the unique polynomial $f$ such that the degree of $f$ is less than $n$ and $f(g^i)=u_i$.
 
 ## Suggested Reading and Videos
-This [DFT video](https://www.youtube.com/watch?v=nl9TZanwbBk) and [FFT video](https://www.youtube.com/watch?v=E8HeD-MUrjY) from UW professor Steve Brunton are brief and instructive. For visual intuition, we recommend Grant Sanderson's [3blue1brown video](https://www.youtube.com/watch?v=spUNpyF58BY) and [lecture](https://www.youtube.com/watch?v=g8RkArhtCc4). To translate from FFTs to NTTs, replace the complex root of unity with a finite field root of unity. 
+- [Slides](https://docs.google.com/presentation/d/18EMbRUihd8lUOMd1cIvqpCL1qI0JcCqp/edit?usp=sharing&ouid=108906331404608387394&rtpof=true&sd=true) and [recording](https://youtu.be/Pct3rS4Y0IA) from RISC Zero Study Club. 
+- NTTs are just a finite field version of the FFT algorithm; to translate from FFTs to NTTs, replace the complex root of unity with a finite field root of unity. 
+  - This [DFT video](https://www.youtube.com/watch?v=nl9TZanwbBk) and [FFT video](https://www.youtube.com/watch?v=E8HeD-MUrjY) from UW professor Steve Brunton are brief and instructive. 
+  - [3blue1brown video](https://www.youtube.com/watch?v=spUNpyF58BY) and [lecture](https://www.youtube.com/watch?v=g8RkArhtCc4) on FFTs
+  - [Veritasium](https://www.youtube.com/watch?v=nmgFG7PUHfo) on FFTs
 
 For a deeper look into the algorithm at both a software and hardware level, we recommend this [FFT video from Reducible](https://www.youtube.com/watch?v=h7apO7q16V0). And here's [Vitalik's take](https://vitalik.ca/general/2019/05/12/fft.html) on FFTs/NTTs. 
 
