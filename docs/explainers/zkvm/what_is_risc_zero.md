@@ -16,3 +16,7 @@ Foundational work on SNARKs and [STARKs](../../reference-docs/about-starks.md) s
 
 More detailed technical and theoretical materials are available by request.
 <!-- TODO either release paper or put e-mail address here  -->
+
+### Video Explainers
+- [RISC Zero: A RISC-V zkVM](https://www.youtube.com/watch?v=ZFVjooWdXVE&list=PLcPzhUaCxlCgig7ofeARMPwQ8vbuD6hC5&index=1)
+- [What is the RISC Zero zkVM](https://www.youtube.com/watch?v=cLqFvhmXiD0&list=PLcPzhUaCxlCgig7ofeARMPwQ8vbuD6hC5&index=2)
