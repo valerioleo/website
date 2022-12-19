@@ -81,6 +81,8 @@ Currently, our host driver program creates and runs a prover. The `prover.run()`
     let receipt = prover.run().unwrap();
 ```
 
+Make sure to uncomment the `use risc0_zkvm::serde::{from_slice, to_vec};` line at the top of the file so that we can access the helper functions in the lines we just added.
+
 
 ## Step 4 (Guest): Multiply two values and commit their result
 
@@ -104,7 +106,9 @@ pub fn main() {
 ```
 ### Load values from the host
 
-First, we use `env::read()` to load both numbers:
+First, add `use risc0_zkvm_guest::env;` at the top of the file (outside of the function body) to bring `env` into scope.
+
+Then, we use `env::read()` to load both numbers:
 
 ```
     let a: u64 = env::read();
