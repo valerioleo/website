@@ -13,3 +13,5 @@ By linking the MethodID to the asserted output of the computation, computational
 
 *For a more technical description of RISC Zero's receipts, see the [Proof System Sequence Diagram](proof-system-sequence-diagram.md), the [Seal Construction Explainer](constructing-a-seal.md) and the [STARKs reference page](../../reference-docs/about-starks.md).* 
 
+## Video Explainer
+- [How does RISC Zero work?](https://www.youtube.com/watch?v=8hwY88xJoyM&list=PLcPzhUaCxlCgig7ofeARMPwQ8vbuD6hC5&index=8)
