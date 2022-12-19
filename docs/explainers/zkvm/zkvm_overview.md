@@ -46,3 +46,6 @@ Before being executed on the zkVM, guest source code is converted into a RISC-V 
 After the binary is executed, an [execution trace](../proof-system/what_is_a_trace.md) contains a complete record of zkVM operation. The trace is inspected and the ELF file's instructions are compared to the operations that were actually performed. A valid trace means that the ELF file was faithfully executed according to the rules of the RISC-V instruction set architecture.
 
 The execution trace and the journal then used to generate a seal, a blob of cryptographic data that shows the receipt is valid. The seal has properties that reveal whether itself or the journal have been altered. When the receipt is verified, the seal will be checked to confirm the validity of the receipt. To check whether the correct binary was executed, the seal can be compared to the method ID of the expected ELF file.
+
+## Video Explainer
+- [How does RISC Zero work?](https://www.youtube.com/watch?v=8hwY88xJoyM&list=PLcPzhUaCxlCgig7ofeARMPwQ8vbuD6hC5&index=8)
