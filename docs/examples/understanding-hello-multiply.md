@@ -117,7 +117,7 @@ The following steps are included in the `main.rs` host program before the prover
 
 1. The host creates a Prover object, passing it the ELF path and method ID for `multiply`.
 
-2. The host makes sure that the guest can read the two numbers being multiplied. The function `prover.add_input()` sends the host-defined numbers to the guest.
+2. The host makes sure that the guest can read the two numbers being multiplied. The function `prover.add_input_u32_slice()` sends the host-defined numbers to the guest.
 
 The host then calls the prover's `run()` method. The prover executes a compiled binary of the guest program, which sets in motion the process of generating a trace and producing a receipt. As the guest binary executes, the zkVM performs the following steps, as dictated by the code in `multiply.rs`:
 

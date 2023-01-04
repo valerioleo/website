@@ -10,7 +10,7 @@ To get started, clone the [Rust starter template](https://github.com/risc0/risc0
 
 ### Name the new project
 
-Let's give our "Hello, Multiply!" project a name. Rename the folder `project_or_component_name` to `factors`.
+Let's give our "Hello, Multiply!" project a name. Rename the folder `host` to `factors`.
 
 Update the corresponding workspace member entry in the top-level `Cargo.toml` file:
 ```
@@ -75,8 +75,8 @@ Currently, our host driver program creates and runs a prover. The `prover.run()`
  ```
     let mut prover = Prover::new(&std::fs::read(MULTIPLY_PATH).unwrap(), MULTIPLY_ID).unwrap();
 
-    prover.add_input(to_vec(&a).unwrap().as_slice()).unwrap();
-    prover.add_input(to_vec(&b).unwrap().as_slice()).unwrap();
+    prover.add_input_u32_slice(to_vec(&a).unwrap().as_slice());
+    prover.add_input_u32_slice(to_vec(&b).unwrap().as_slice());
 
     let receipt = prover.run().unwrap();
 ```
@@ -106,7 +106,7 @@ pub fn main() {
 ```
 ### Load values from the host
 
-First, add `use risc0_zkvm_guest::env;` at the top of the file (outside of the function body) to bring `env` into scope.
+First, add `use risc0_zkvm::guest::env;` at the top of the file (outside of the function body) to bring `env` into scope.
 
 Then, we use `env::read()` to load both numbers:
 
@@ -138,7 +138,7 @@ Now that we have a value to read from the receipt, let's extract the journal's c
 
 ```
     // Extract journal of receipt (i.e. output c, where c = a * b)
-    let c: u64 = from_slice(&receipt.get_journal_vec().unwrap()).unwrap();
+    let c: u64 = from_slice(receipt.journal.as_slice()).unwrap();
 
     // Print an assertion
     println!("Hello, world! I know the factors of {}, and I can prove it!", c);
