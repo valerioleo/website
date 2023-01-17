@@ -42,4 +42,4 @@ Our initial release of RISC Zero is different in a few critical ways:
 
 # What's Next?
 
-We are working on several exciting projects internally that will be announced, explained, and released over the coming months. Please join our [mailing list](https://risczero.com), [Discord](https://risczero.com) or follow us on [Twitter](https://twitter.com/risczero)
+We are working on several exciting projects internally that will be announced, explained, and released over the coming months. Please join our [Discord](https://risczero.com) or follow us on [Twitter](https://twitter.com/risczero)

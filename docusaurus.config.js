@@ -90,12 +90,14 @@ const config = {
             position: 'right',
             label: 'GitHub',
           },
+/*
           {
             label: 'Mailing List',
             position: 'right',
             to: 'mailing',
           },
-          {
+ */
+         {
             type: 'dropdown',
             position: 'right',
             label: 'Community',
