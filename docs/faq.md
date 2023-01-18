@@ -5,10 +5,12 @@ id: tech_faq
 
 -------------------------------
 ## Contents
-* [ZKP System](#zkp-system)
-* [Code Project Help](#code-project-help)
-* [Guest/Host Interactions](#guest--host-interactions)
-* [Data Processing & Performance](#data-processing--performance)
+- [FAQ](#faq)
+  - [Contents](#contents)
+  - [ZKP System](#zkp-system)
+  - [Code Project Help](#code-project-help)
+  - [Guest / Host Interactions](#guest--host-interactions)
+  - [Data Processing \& Performance](#data-processing--performance)
 
 -------------------------------
 
@@ -41,13 +43,21 @@ Because the data structures supporting all three of these need to match very car
 <details closed>
 <summary>
 Q:
-What exactly is the method ID and how can we use it to determine if program code is altered before execution?
+What exactly is the image ID?
 </summary>
  <br/>
- A: To confirm an execution path is possible given a particular binary, we want to match a record of executed instruction cycles to the instructions loaded into the code columns of our proof system. Because we can't know which program instructions will be read before runtime, we match the observed execution path against a table of Merkle tree roots representing successively larger portions of the code columns, increasing by powers of two up to an upper limit. The method ID is the table of Merkle roots, and it allows us to efficiently match executed program instructions to a loaded binary representing many possible instructions.
+ A: The image ID uses hashing to relate the receipt to the code that produced the receipt. Specifically, the image ID is the SHA-2 hash of the image of the initial zkVM memory state.  
 </details>
 <br/>
--------------------------------
+<details closed>
+<summary>
+Q:
+How can we use the image ID to determine if program code is altered before execution?
+</summary>
+ <br/>
+ A: The image ID can be determined from the compiled ELF source code. Someone wishing to confirm that a receipt corresponds to Rust source code can compile that code targeting the RISC Zero zkVM and verify that the image ID resulting from this compilation matches the image ID in the receipt.
+</details>
+<br/>
 
 ## Code Project Help
 
@@ -59,7 +69,7 @@ What do I do with the proof receipt once I’ve created it?
 </summary>
  <br/>
 A:
-The receipt can be serialized and sent over the network to the verifier. The verifier does not need to have access to the host code, but they do need the method ID of the expected program. The method ID is a required parameter for the receipt.verify() function and is used to confirm that the expected code was executed.
+The receipt can be serialized and sent over the network to the verifier. The verifier does not need to have access to the host code, but they do need the image ID of the expected program. The image ID is a required parameter for the receipt.verify() function and is used to confirm that the expected code was executed.
 
  In our code examples, the proof receipt is generated and verified within the same program, but the most common use case is one in which the verification happens on another system.
 </details>
@@ -72,7 +82,6 @@ Q: What types of programs does the zkVM support in Rust?
 A: The zkVM is actively expanding experimental support for the Rust standard library. If you run into issues, we recommend using crates with no_std options. You may also find a solution on our <a href="">Discord</a> or in our <a href="https://github.com/risc0/risc0/issues">Github issues</a>.
 </details>
 <br/>
--------------------------------
 
 ## Guest / Host Interactions
 <details closed>
@@ -82,7 +91,7 @@ Q: If the guest zkVM lives on the host machine, can’t the host still tamper wi
 <br/>
 A: Like other zk-STARKs, RISC Zero’s implementation makes it cryptographically infeasable to generate an invalid receipt:
 
-* If the binary is modified, then the receipt’s seal will not match the method ID of the expected binary.
+* If the binary is modified, then the receipt’s seal will not match the image ID of the expected binary.
 * If the execution is modified, then the execution trace will be invalid.
 * If the output is modified, then the journal’s hash will not match the hash recorded in the receipt.
 
@@ -108,7 +117,6 @@ A: If you don't need to perform a computation securely, if others don't rely on 
 However, consider that code run in the RISC Zero zkVM can be shown to behave as expected even on a host that is entirely untrusted. To get the most value out of this guarantee, we recommend dividing the computational labor with an untrusted host in mind. That is, other parties should not need to trust the host's output or operations in order to benefit from the work done in the zkVM.
 </details>
 <br/>
--------------------------------
 
 ## Data Processing & Performance
  <br/>
@@ -120,11 +128,11 @@ If I want the guest to process large volumes of data during execution, I might b
  <br/>
  
 A:
-If data is loaded from the host to restrict guest program size, the most significant limitation on zkVM data processing is a constraint on instruction cycles. The zkVM supports programs up to a number of instruction cycles determined by the upper limit for the method ID (which must include a Merkle tree of all program instruction cycles). Loading data into the guest costs instruction cycles, as does data processing.
+If data is loaded from the host to restrict guest program size, the most significant limitation on zkVM data processing is a constraint on instruction cycles. Loading data into the guest costs instruction cycles, as does data processing.
 
 There are workarounds for data limitations if the data is only included to ensure that its integrity becomes part of the proof of computation. If the data can be processed externally and simply needs to be verifiably unchanged, consider processing data externally and sending the guest a Merkle proof or (if no processing is needed) generating a SHA of a large dataset.
 
-In the future, we plan to lift these processing limitations (with execution time tradeoffs or sufficient hardware to parallelize instructions).
+In the future, we plan to lift these processing limitations using continuations and recursion.
 </details>
  <br/>
  

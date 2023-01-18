@@ -24,7 +24,7 @@ In some ways, Alice's process follows convention. Alice generates a `password` t
 
 # What Information Can A Zero-Knowledge Proof Provide?
 
-The `method ID` and the the `journal` on the receipt provide Bob assurance that:
+The `image ID` and the the `journal` on the receipt provide Bob assurance that:
 
     The program Alice executed within the zkVM was actually Bob's Password Checker, and
     Bob's Password Checker approved Alice's password
@@ -56,7 +56,7 @@ When the host driver runs a guest program on the RISC Zero zkVM, its operations 
 
 Taken on their own, these constraints on computational integrity don't tell Bob <i>which</i> program instructions have been executed. If we stopped here, Alice might run a modified program that checked her password but substituted an alternate, attacker-chosen password prior to hash generation.
 
-Bob's receipt validation process also confirms that the correct program was executed. Bob validates the receipt using a `method ID` associated with the program he expects Alice to run. If Bob's `receipt` is validated, then Alice's program execution matches Bob's password-checking program.
+Bob's receipt validation process also confirms that the correct program was executed. Bob validates the receipt using a `image ID` associated with the program he expects Alice to run. If Bob's `receipt` is validated, then Alice's program execution matches Bob's password-checking program.
 
 ### Shared Results: the Journal and the Seal
 
@@ -70,9 +70,9 @@ The seal integrity requirements help protect against an attack that alters journ
 
 We now know that Bob can confirm a program's identity, computational integrity, and shared results by checking Alice's computational `receipt`. As a final precaution, we'd like to ensure that these checks don't accidentally reveal Alice's password. To understand this consideration, let's return briefly to the receipt verification process.
 
-Bob identifies Alice's program using a `method ID` whose uniqueness is tied to the uniqueness of the guest program. Anyone with a valid `receipt` from Alice can therefore make guesses about the program she executed (much like guessing a password by computing candidate password hashes). Therefore, neither her program's identity nor its contents should be a secret. <b>Guest code should never include any deterministic values that we do not expect someone to share</b>. 
+Bob identifies Alice's program using an `image ID` whose uniqueness is tied to the uniqueness of the guest program. Anyone with a valid `receipt` from Alice can therefore make guesses about the program she executed (much like guessing a password by computing candidate password hashes). Therefore, neither her program's identity nor its contents should be a secret. <b>Guest code should never include any deterministic values that we do not expect someone to share</b>. 
 
-Relatedly, guest zkVM code also should not include any content that we'd expect someone to regularly change, which includes configuration files and hard-coded values. Alice's guest zkVM password-checking program does not vary between password choices because the password and salt are not included in the guest program's ELF binary; they are loaded into guest memory by the host. This not only helps protect Alice's secrets, it also ensures that Bob's Identity Service expects one unique `method ID` for all its users.
+Relatedly, guest zkVM code also should not include any content that we'd expect someone to regularly change, which includes configuration files and hard-coded values. Alice's guest zkVM password-checking program does not vary between password choices because the password and salt are not included in the guest program's ELF binary; they are loaded into guest memory by the host. This not only helps protect Alice's secrets, it also ensures that Bob's Identity Service expects one unique `image ID` for all its users.
 
 # Writing for the RISC Zero zkVM
 

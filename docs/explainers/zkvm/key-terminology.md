@@ -16,7 +16,7 @@ slug: /terminology
 - *execute* -- run a method inside the zkVM and produce a receipt of correct execution
 - *commit* -- append data to the journal
 - *receipt* -- a record of correct execution, consisting of:
-  - *method ID* -- a small unique identifier that identifies a method
+  - *image ID* -- a small unique identifier that identifies the method or boot image for zkVM operation
   - *journal* -- all the things the method wants to publicly output and commit to, written to by the method, attached to receipt
   - *seal* -- the cryptographic blob which proves that the receipt is valid
 - *verify* -- check that the receipt is valid, i.e. verify the seal

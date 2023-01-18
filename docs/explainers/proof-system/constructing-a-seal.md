@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Constructing a Seal
 
-> The **seal** is the part of the [receipt](what_is_a_receipt.md) that allows third-parties to authenticate the validity of the [journal](../zkvm/zkvm_overview.md). It's the zero-knowledge proof that sits at the crux of our technology, showing that the journal was faithfully constructed (according to the program defined by the [methodID](../zkvm/zkvm_overview.md)). 
+> The **seal** is the part of the [receipt](what_is_a_receipt.md) that allows third-parties to authenticate the validity of the [journal](../zkvm/zkvm_overview.md). It's the zero-knowledge proof that sits at the crux of our technology, showing that the journal was faithfully constructed (according to the program defined by the [Image ID](../zkvm/zkvm_overview.md)). 
 
 The construction of a seal is highly technical, relying on several recent advances in the world of zero-knowledge cryptography. In this series of 10 brief lessons, we walk through the construction of a RISC Zero seal with as little technical jargon as possible. 
 

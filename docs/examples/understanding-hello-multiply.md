@@ -53,7 +53,7 @@ The diagram below shows these components in action:
 flowchart LR
 A(multiply.rs)-|compiles to an|->B(ELF binary)
 B-|Whose execution produces an|-> C(Execution trace)
-B-|Whose hash forms a unique|->D(Method ID)
+B-|Whose hash forms a unique|->D(Image ID)
 D-|That can be compared to the|->E(Cryptographic seal)
 C-|That, if valid,<br>generates a|->E(Cryptographic seal)
 B-|Whose operations can include<br>committing values to a|->F(Journal)
@@ -62,7 +62,7 @@ E
 F
 end
 subgraph x[The receipt tells us:]
-E---H(What binary executed in the ZKVM<br>Whether the execution<br>followed expected behavior<br/><br/>Whether the journal or method ID<br/>have changed)
+E---H(What binary executed in the ZKVM<br>Whether the execution<br>followed expected behavior<br/><br/>Whether the journal or image ID<br/>have changed)
 F---I(The values of all contents<br>written to the public journal)
 end
 style B fill:#3c6464
@@ -115,7 +115,7 @@ To get you started, the next section describes which actions must be explicitly 
 
 The following steps are included in the `main.rs` host program before the prover is called. Before the host program tells the prover to execute the guest program, it needs to make sure that all relevant methods and values are accessible to the guest.
 
-1. The host creates a Prover object, passing it the ELF path and method ID for `multiply`.
+1. The host creates a Prover object, passing it the ELF path and image ID for `multiply`.
 
 2. The host makes sure that the guest can read the two numbers being multiplied. The function `prover.add_input_u32_slice()` sends the host-defined numbers to the guest.
 
@@ -127,9 +127,9 @@ The host then calls the prover's `run()` method. The prover executes a compiled 
 
 3. To share the computed result, the guest writes them to the journal using the call `env::commit()`.
 
-After the guest program has executed, the prover returns a `Receipt` object. Recall that this object includes the method ID, journal (with shared results), and a cryptographic seal.
+After the guest program has executed, the prover returns a `Receipt` object. Recall that this object includes the image ID, journal (with shared results), and a cryptographic seal.
 
-If we send the receipt to someone else, then they can see we ran the expected program (using the method ID); they can also read the computed product from the receipt's journal contents.
+If we send the receipt to someone else, then they can see we ran the expected program (using the image ID); they can also read the computed product from the receipt's journal contents.
 
 # A note on practical use
 
@@ -137,7 +137,7 @@ For brevity (and to stay agnostic about use cases), our Hello Multiply example o
 
 In our example, the receipt is verified from the `main.rs` host program. However, the value of the receipt is that it can convince another party we ran the `multiply.rs` program. In a real-world scenario, then, we would want to send the receipt to someone else, most likely by serializing it and passing it over a network.
 
-We would also want to give the source code for the guest program to the recipient. The recipient would generate the `method ID` of the zkVM program binary on their side and use this to check the receipt's method ID.
+We would also want to give the source code for the guest program to the recipient. The recipient would generate the `image ID` of the zkVM program binary on their side and use this to check the receipt's image ID.
 
 If you would like to know more about receipts, we recommend our article [Understanding the Password Validity Checker](password_checker.md). We'll show you how the computational receipt is created and checked in greater detail as we walk through how RISC Zero projects can allow us to trust user-provided data. We'll look at a slightly (but not much) more involved program that allows a user to check their own password against a set of validity requirements (e.g., the inclusion of uppercase letters) and provide their own password hash.
 

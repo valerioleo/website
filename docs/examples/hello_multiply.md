@@ -42,12 +42,12 @@ While we're at it, let's change the rest of the references in `factors/src/main.
     let method_code = std::fs::read(MULTIPLY_PATH)
         .expect("Method code should be present at the specified path; did you use the correct *_PATH constant?");
     let mut prover = Prover::new(&method_code, MULTIPLY_ID)
-        .expect("Prover should be constructed from valid method source code and corresponding method ID");
+        .expect("Prover should be constructed from valid method source code and corresponding image ID");
 
 ...
 
     receipt.verify(MULTIPLY_ID)
-        .expect("Code you have proven should successfully verify; did you specify the correct method ID?");
+        .expect("Code you have proven should successfully verify; did you specify the correct image ID?");
 ```
 
 ### Intermission: Build and run the project!

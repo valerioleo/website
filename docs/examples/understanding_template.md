@@ -138,7 +138,7 @@ fn main() {
     let method_code = std::fs::read(METHOD_NAME_PATH)
         .expect("Method code should be present at the specified path; did you use the correct *_PATH constant?");
     let mut prover = Prover::new(&method_code, METHOD_NAME_ID)
-        .expect("Prover should be constructed from valid method source code and corresponding method ID");
+        .expect("Prover should be constructed from valid method source code and corresponding image ID");
 
     // Run prover & generate receipt
     let receipt = prover.run()
@@ -146,7 +146,7 @@ fn main() {
 
     // Optional: Verify receipt to confirm that recipients will also be able to verify your receipt
     receipt.verify(METHOD_NAME_ID)
-        .expect("Code you have proven should successfully verify; did you specify the correct method ID?");
+        .expect("Code you have proven should successfully verify; did you specify the correct image ID?");
 }
 
 ```
@@ -155,7 +155,7 @@ We start with use declarations
 use methods::{METHOD_NAME_ID, METHOD_NAME_PATH};
 use risc0_zkvm::host::Prover;
 ```
-For `Prover` this is straightforward, but the `methods` are coming from computer generated code. Specifically, the `methods.rs` [file you included earlier](#including) contains generated constants needed to call guest methods. For each [guest code file](#guest-code), two constants are generated: `<FILENAME>_ID` and `<FILENAME>_PATH` (where `<FILENAME>` is the name of the file rendered in all capital letters). The `<FILENAME>_ID` is a _method ID_, a cryptographic hash that will be committed to the receipt and allows you to convince a verifier that the code you proved is the same code you are showing to them. The `<FILENAME>_PATH` is a path to where your method was built.
+For `Prover` this is straightforward, but the `methods` are coming from computer generated code. Specifically, the `methods.rs` [file you included earlier](#including) contains generated constants needed to call guest methods. For each [guest code file](#guest-code), two constants are generated: `<FILENAME>_ID` and `<FILENAME>_PATH` (where `<FILENAME>` is the name of the file rendered in all capital letters). The `<FILENAME>_ID` is a _image ID_, a cryptographic hash that will be committed to the receipt and allows you to convince a verifier that the code you proved is the same code you are showing to them. The `<FILENAME>_PATH` is a path to where your method was built.
 ```
 fn main() {
 ```
@@ -166,7 +166,7 @@ We will replace `expect`s with `unwrap`s in the following lines so we can focus 
     let method_code = std::fs::read(METHOD_NAME_PATH).unwrap();
     let mut prover = Prover::new(&method_code, METHOD_NAME_ID).unwrap();
 ```
-This creates a prover, which can be run to execute its associated guest code and produce a receipt proving execution. It must be initialized with the contents of an ELF file of the code to be executed and with a method ID. These have be created in the build step, and can be accessed via the `<FILENAME>_PATH` and `<FILENAME>_ID` constants.
+This creates a prover, which can be run to execute its associated guest code and produce a receipt proving execution. It must be initialized with the contents of an ELF file of the code to be executed and with a image ID. These have be created in the build step, and can be accessed via the `<FILENAME>_PATH` and `<FILENAME>_ID` constants.
 ```
     let receipt = prover.run().unwrap();
 ```
@@ -174,4 +174,4 @@ This line actually runs the guest code inside the prover, the result of which is
 ```
     receipt.verify(METHOD_NAME_ID).unwrap();
 ```
-This line verifies that a receipt corresponds to the execution of guest code whose method ID is `<FILENAME>_ID`. It's not necessary for the prover to run this line to make a valid proof. Instead, this is needed by anyone who wishes to verify that they have an honest receipt.
+This line verifies that a receipt corresponds to the execution of guest code whose image ID is `<FILENAME>_ID`. It's not necessary for the prover to run this line to make a valid proof. Instead, this is needed by anyone who wishes to verify that they have an honest receipt.
