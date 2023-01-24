@@ -14,7 +14,7 @@ The FRI protocol consists of a number of `commit` rounds followed by a number of
   - RISC Zero runs `commit` rounds until the degree of the FRI polynomial is less than or equal to 255. 
 - In each `query` round, the Prover reveals Merkle branches (and leaves) from each of the FRI commitments. The branches revealed in the query rounds are selected using the [Fiat-Shamir Heuristic](https://en.wikipedia.org/wiki/Fiat%E2%80%93Shamir_heuristic). 
   - Varying the number of `query` rounds offers a tradeoff between security level and computational efficiency. 
-- RISC Zero's implementation for FRI can be found [here](https://github.com/risc0/risc0/blob/main/risc0/zkp/rust/src/prove/fri.rs)
+- RISC Zero's implementation for FRI can be found [here](https://github.com/risc0/risc0/blob/main/risc0/zkp/src/prove/fri.rs)
 ### About DEEP-FRI
 Shortly after the FRI protocol was released, an alternative protocol called DEEP-FRI was released. Although DEEP-FRI was initially thought to have improved soundness relative to FRI, the Proximity Gaps for Reed-Solomon Codes paper shows that the original FRI protocol offers the same soundness results as DEEP-FRI at less computational complexity. The RISC Zero ZKP system uses the original FRI protocol. 
 

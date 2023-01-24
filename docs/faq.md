@@ -22,7 +22,7 @@ What is a zero-knowledge proof?
 </summary>
 <br/>
 A:
-A zero-knowledge proof (or ZKP) is a protocol allowing <a href="https://en.wikipedia.org/wiki/Zero-knowledge_proof">"one party (the prover) [to] prove to another party (the verifier) that a given statement is true [without] conveying any additional information"</a>. In the specific case of the RISC Zero ZKP system, the prover can run an agreed-upon function F, passing it secret input and generating both a public output and a 'receipt' of F’s correct execution.  The prover can send this receipt to the verifier, who can then check it, and presuming it checks correctly, the verifier can be very sure that prover ran the function correctly and that it produced a specific output. See <a href="https://risczero.com/docs/explainers/proof-system/proof-system-sequence-diagram.md">our explainer on the RISC Zero ZKP system</a> for more details.
+A zero-knowledge proof (or ZKP) is a protocol allowing <a href="https://en.wikipedia.org/wiki/Zero-knowledge_proof">"one party (the prover) [to] prove to another party (the verifier) that a given statement is true [without] conveying any additional information"</a>. In the specific case of the RISC Zero ZKP system, the prover can run an agreed-upon function F, passing it secret input and generating both a public output and a 'receipt' of F’s correct execution.  The prover can send this receipt to the verifier, who can then check it, and presuming it checks correctly, the verifier can be very sure that prover ran the function correctly and that it produced a specific output. See [our explainer on the RISC Zero ZKP system](explainers/proof-system/proof-system-sequence-diagram.md) for more details.
 </details>
  <br/>
 
