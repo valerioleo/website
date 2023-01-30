@@ -37,7 +37,7 @@ project_name
 │   ├── build.rs                           <-- Build (embed) code goes here
 │   ├── guest
 │   │   ├── Cargo.toml
-│   │   ├── build.rs                       <-- Build (link) code goes here
+│   │   ├── build.rs                       
 │   │   └── src
 │   │       └── bin
 │   │           └── method_name.rs         <-- Guest code goes here
@@ -84,17 +84,9 @@ Here is the actual guest code. Notice that the function is named `main`, matchin
 
 ## Building Guest Methods
 
-The `risc0-build` crate has two functions, [`embed_methods`](https://docs.rs/risc0-build/latest/risc0_build/fn.embed_methods.html) and [`link`](https://docs.rs/risc0-build/latest/risc0_build/fn.link.html), which are used to build guest code into a method (or methods) that the host can call. Simple use cases have no need to do any customization for the build step, and you can just call these functions as described below. For more complex cases, it is sometimes useful to replace `embed_methods` with [`embed_methods_with_options`](https://docs.rs/risc0-build/latest/risc0_build/fn.embed_methods_with_options.html) (see the [FAQ](../faq.md#zkp-system) for an example where you might want to specify embedding options).
+The `risc0-build` crate has two functions, [`embed_methods`](https://docs.rs/risc0-build/latest/risc0_build/fn.embed_methods.html) and [`embed_methods_with_options`](https://docs.rs/risc0-build/latest/risc0_build/fn.embed_methods_with_options.html), which are used to build guest code into a method (or methods) that the host can call. Simple use cases have no need to do any customization for the build step, and you can just call these functions as described below. For more complex cases, it is sometimes useful to replace `embed_methods` with `embed_methods_with_options` (see the [FAQ](../faq.md#zkp-system) for an example where you might want to specify embedding options).
 
 These functions are called at build time using [Cargo build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html). The resulting files with the built methods must then be included so that the host can depend on them.
-
-### Linking
-The guest code is linked via a `build.rs` file in the root of the `guest` directory containing the following:
-```
-fn main() {
-    risc0_build::link();
-}
-```
 
 ### Embedding
 The guest methods are embedded using a `build.rs` file in the methods directory where you want the methods embedded. This is where the host code will need to look to find the guest methods. A basic `build.rs` file for embedding methods looks as follows:
@@ -106,13 +98,13 @@ fn main() {
 For more advanced cases, replace `embed_methods` with a call to [`embed_methods_with_options`](https://docs.rs/risc0-build/latest/risc0_build/fn.embed_methods_with_options.html) and set appropriate options for your use case.
 
 ### Including
-Linking and embedding the guest methods using these [build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html) creates source files in the Rust output directory. To make this code available to the host, these generated files must be included somewhere the host can find them. So the methods directory contains a file `src/lib.rs` with the following include command:
+Embedding the guest methods using these [build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html) creates source files in the Rust output directory. To make this code available to the host, these generated files must be included somewhere the host can find them. So the methods directory contains a file `src/lib.rs` with the following include command:
 ```
 include!(concat!(env!("OUT_DIR"), "/methods.rs"));
 ```
 
 ### Build dependencies in Cargo
-Both linking and embedding depend on `risc0-build`. Since these happen in built scripts, Cargo needs to know they are _build_ dependencies. Therefore, in both the guest directory Cargo file (for linking) and the methods directory cargo file (for embedding), we include
+Embedding depends on `risc0-build`. Since embedding happens in built scripts, Cargo needs to know they are _build_ dependencies. Therefore, in the methods directory cargo file (for embedding), we include
 ```
 [build-dependencies]
 risc0-build = "0.11"
