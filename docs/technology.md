@@ -14,3 +14,5 @@ The RISC Zero zkVM is an `open-source, zero-knowledge virtual machine` that lets
 - [**Background/Reference Materials**](reference-docs/about-starks.md) - This section includes a variety of reference materials.
 
 - [**zkVM FAQ**](faq.md) - This FAQ provides answers to commonly asked questions about the zkVM.
+
+- [**RISC Zero Study Club**](../studyclub) - RISC Zero's Study Club sessions aim to introduce the pre-requisite concepts necessary to understand our technology. 
