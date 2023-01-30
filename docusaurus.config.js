@@ -57,6 +57,7 @@ const config = {
     ({
       colorMode: {
         defaultMode: 'dark',
+        respectPrefersColorScheme: false,
       },
       navbar: {
         title: 'RISC Zero',

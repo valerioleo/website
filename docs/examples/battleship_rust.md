@@ -179,7 +179,7 @@ Each turn a player fires a shot and the opponent responds, with game logic runni
 - `methods/guest/src/bin/init.rs` -- The zkVM guest method for initializing game state.
 - `methods/guest/src/bin/turn.rs` -- The zkVM guest method for processing gameplay messages.
 
-The Rust API documentation for the `risc0-zkVM-host` crate is available on `docs.rs` here: https://docs.rs/risc0-zkVM-host/latest/risc0_zkVM_host/. Thanks to the single-language approach the types and logic in `core/src/lib.rs` can be used in both the guest code and host code even though they deploy to different instruction sets and in very different environments. 
+The Rust API documentation for the risc0 crates is available [here](https://github.com/risc0/risc0#rust-libraries). Thanks to the single-language approach the types and logic in `core/src/lib.rs` can be used in both the guest code and host code even though they deploy to different instruction sets and in very different environments. 
 
 ### Valid Setup
 
