@@ -5,12 +5,18 @@
 Implementation and documentation for Reed-Solomon encoding is in the `risc0-zkp-core` [Rust crate](https://github.com/risc0/risc0#rust-crates).
 
 ## Basic Function
-A RISC Zero [receipt](../explainers/proof-system/what_is_a_receipt.md) demonstrates the validity of the associated [execution trace](../explainers/proof-system/what_is_a_trace.md) by encoding  the execution instructions and the trace data into polynomials and then making various assertions about those polynomials. We refer to this process as _arithmetization of the trace_, and RISC Zero's arithmetization is based on Reed Solomon encoding.
+A RISC Zero [receipt](../explainers/proof-system/what_is_a_receipt.md) demonstrates the validity of the associated [execution trace](../explainers/proof-system/what_is_a_trace.md) by encoding  the execution instructions and the trace data into polynomials and then making various assertions about those polynomials. 
+We refer to this process as _arithmetization of the trace_, and RISC Zero's arithmetization is based on Reed Solomon encoding.
 
 ## Background
-Adding a [parity bit](https://en.wikipedia.org/wiki/Parity_bit) to a binary string offers a form of error detection. Error correcting codes extend this line of thinking: when sending data that may get corrupted, we can allow the recipient to detect and correct errors by adding some error correcting bits. Reed-Solomon codes are an industry standard for error correction; they're used in many signal processing applications, including cell communication, QR codes, and [STARKs](about-starks.md). 
+Adding a [parity bit](https://en.wikipedia.org/wiki/Parity_bit) to a binary string offers a form of error detection. 
+Error correcting codes extend this line of thinking: when sending data that may get corrupted, we can allow the recipient to detect and correct errors by adding some error correcting bits. 
+Reed-Solomon codes are an industry standard for error correction; they're used in many signal processing applications, including cell communication, QR codes, and [STARKs](about-starks.md). 
 
-In the context of RISC Zero's receipts, the relevance of Reed-Solomon codes is quite a bit more nuanced than the standard error correction use cases. The error amplification of Reed-Solomon encoding provides cryptographic soundness to RISC Zero's computational receipts. During the process of generating a receipt, any errors in the trace are _amplified_ by the process of arithmetization. This error amplification means that even a single error in the execution trace can be easily identified.
+In the context of RISC Zero's receipts, the relevance of Reed-Solomon codes is quite a bit more nuanced than the standard error correction use cases. 
+The error amplification of Reed-Solomon encoding provides cryptographic soundness to RISC Zero's computational receipts. 
+During the process of generating a receipt, any errors in the trace are _amplified_ by the process of arithmetization. 
+This error amplification means that even a single error in the execution trace can be easily identified.
 
 ## Suggested Reading and Videos
 - [Slides](https://drive.google.com/file/d/1p0AZ3E4kLIDmFslW_c47YGb-EgeXc_YZ/view), [recording](https://youtu.be/Yu9DHhdSqQo), and [practice problems](https://drive.google.com/file/d/1JtzBGxz1c-PDVIIRmWa85_A22NS9dlL-/view?usp=share_link) from RISC Zero Study Club

@@ -1,7 +1,9 @@
 # About the FRI Protocol 
 The FRI ([**F**ast](about-ntts-and-fourier.md), [**R**eed-Solomon](about-rs-codes.md) [**I**nteractive](https://en.wikipedia.org/wiki/Interactive_proof_system) [Oracle](https://en.wikipedia.org/wiki/Oracle_machine) [Proof of Proximity](https://privacytools.seas.harvard.edu/files/privacytools/files/stoc283fp-rothblum.pdf)) protocol is the final component of RISC Zero's argument of computational integrity. 
 
-RISC Zero's [STARK](about-starks.md) converts an assertion of computational integrity to an assertion about polynomial division. In the language of Reed-Solomon codes, this assertion about polynomial division can be re-framed as an assertion about [block proximity](https://en.wikipedia.org/wiki/Hamming_distance). The FRI protocol finishes the argument by proving the assertion about block proximity. 
+RISC Zero's [STARK](about-starks.md) converts an assertion of computational integrity to an assertion about polynomial division. 
+In the language of Reed-Solomon codes, this assertion about polynomial division can be re-framed as an assertion about [block proximity](https://en.wikipedia.org/wiki/Hamming_distance). 
+The FRI protocol finishes the argument by proving the assertion about block proximity. 
 
 ## Basic Function
 Given a Merkle root, the *FRI protocol*  is a recursive technique for proving that the associated Merkle leaves are associated with a low-degree polynomial.
@@ -16,7 +18,9 @@ The FRI protocol consists of a number of `commit` rounds followed by a number of
   - Varying the number of `query` rounds offers a tradeoff between security level and computational efficiency. 
 - RISC Zero's implementation for FRI can be found [here](https://github.com/risc0/risc0/blob/main/risc0/zkp/src/prove/fri.rs)
 ### About DEEP-FRI
-Shortly after the FRI protocol was released, an alternative protocol called DEEP-FRI was released. Although DEEP-FRI was initially thought to have improved soundness relative to FRI, the Proximity Gaps for Reed-Solomon Codes paper shows that the original FRI protocol offers the same soundness results as DEEP-FRI at less computational complexity. The RISC Zero ZKP system uses the original FRI protocol. 
+Shortly after the FRI protocol was released, an alternative protocol called DEEP-FRI was released. 
+Although DEEP-FRI was initially thought to have improved soundness relative to FRI, the Proximity Gaps for Reed-Solomon Codes paper shows that the original FRI protocol offers the same soundness results as DEEP-FRI at less computational complexity. 
+The RISC Zero ZKP system uses the original FRI protocol. 
 
 ## Suggested Reading
 ### Academic Papers

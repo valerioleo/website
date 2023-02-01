@@ -22,7 +22,10 @@ What is a zero-knowledge proof?
 </summary>
 <br/>
 A:
-A zero-knowledge proof (or ZKP) is a protocol allowing <a href="https://en.wikipedia.org/wiki/Zero-knowledge_proof">"one party (the prover) [to] prove to another party (the verifier) that a given statement is true [without] conveying any additional information"</a>. In the specific case of the RISC Zero ZKP system, the prover can run an agreed-upon function F, passing it secret input and generating both a public output and a 'receipt' of F’s correct execution.  The prover can send this receipt to the verifier, who can then check it, and presuming it checks correctly, the verifier can be very sure that prover ran the function correctly and that it produced a specific output. See [our explainer on the RISC Zero ZKP system](explainers/proof-system/proof-system-sequence-diagram.md) for more details.
+A zero-knowledge proof (or ZKP) is a protocol allowing <a href="https://en.wikipedia.org/wiki/Zero-knowledge_proof">"one party (the prover) [to] prove to another party (the verifier) that a given statement is true [without] conveying any additional information"</a>. 
+In the specific case of the RISC Zero ZKP system, the prover can run an agreed-upon function F, passing it secret input and generating both a public output and a 'receipt' of F’s correct execution.  
+The prover can send this receipt to the verifier, who can then check it, and presuming it checks correctly, the verifier can be very sure that prover ran the function correctly and that it produced a specific output. 
+See [our explainer on the RISC Zero ZKP system](explainers/proof-system/proof-system-sequence-diagram.md) for more details.
 </details>
  <br/>
 
@@ -46,7 +49,8 @@ Q:
 What exactly is the image ID?
 </summary>
  <br/>
- A: The image ID uses hashing to relate the receipt to the code that produced the receipt. Specifically, the image ID is the SHA-2 hash of the image of the initial zkVM memory state.  
+ A: The image ID uses hashing to relate the receipt to the code that produced the receipt. 
+ Specifically, the image ID is the SHA-2 hash of the image of the initial zkVM memory state.  
 </details>
 <br/>
 <details closed>
@@ -55,7 +59,8 @@ Q:
 How can we use the image ID to determine if program code is altered before execution?
 </summary>
  <br/>
- A: The image ID can be determined from the compiled ELF source code. Someone wishing to confirm that a receipt corresponds to Rust source code can compile that code targeting the RISC Zero zkVM and verify that the image ID resulting from this compilation matches the image ID in the receipt.
+ A: The image ID can be determined from the compiled ELF source code. 
+ Someone wishing to confirm that a receipt corresponds to Rust source code can compile that code targeting the RISC Zero zkVM and verify that the image ID resulting from this compilation matches the image ID in the receipt.
 </details>
 <br/>
 
@@ -69,9 +74,11 @@ What do I do with the proof receipt once I’ve created it?
 </summary>
  <br/>
 A:
-The receipt can be serialized and sent over the network to the verifier. The verifier does not need to have access to the host code, but they do need the image ID of the expected program. The image ID is a required parameter for the receipt.verify() function and is used to confirm that the expected code was executed.
+The receipt can be serialized and sent over the network to the verifier. 
+The verifier does not need to have access to the host code, but they do need the image ID of the expected program. 
+The image ID is a required parameter for the receipt.verify() function and is used to confirm that the expected code was executed.
 
- In our code examples, the proof receipt is generated and verified within the same program, but the most common use case is one in which the verification happens on another system.
+In our code examples, the proof receipt is generated and verified within the same program, but the most common use case is one in which the verification happens on another system.
 </details>
 <br/>
 <details closed>
@@ -79,7 +86,8 @@ The receipt can be serialized and sent over the network to the verifier. The ver
 Q: What types of programs does the zkVM support in Rust?
 </summary>
 <br/>
-A: The zkVM is actively expanding experimental support for the Rust standard library. If you run into issues, we recommend using crates with no_std options. You may also find a solution on our <a href="">Discord</a> or in our <a href="https://github.com/risc0/risc0/issues">Github issues</a>.
+A: The zkVM is actively expanding experimental support for the Rust standard library. 
+If you run into issues, we recommend using crates with no_std options. You may also find a solution on our <a href="">Discord</a> or in our <a href="https://github.com/risc0/risc0/issues">Github issues</a>.
 </details>
 <br/>
 
@@ -103,7 +111,8 @@ Q:  When can information be shared with the guest zkVM? How do you prevent buffe
 </summary>
  <br/> 
 A: 
-Data can be sent during program execution from the host to the guest via a memory map. The host-writeable memory is write-once, meaning that adjacent memory regions cannot be overwritten and executed.
+Data can be sent during program execution from the host to the guest via a memory map. 
+The host-writeable memory is write-once, meaning that adjacent memory regions cannot be overwritten and executed.
 </details>
 <br/>
 <details closed>
@@ -114,7 +123,9 @@ How do I know which computations should be performed in the guest zkVM, and whic
 <br/> 
 A: If you don't need to perform a computation securely, if others don't rely on it, and if it doesn't produce outputs that others rely on, it can probably be performed outside of the zkVM. 
 
-However, consider that code run in the RISC Zero zkVM can be shown to behave as expected even on a host that is entirely untrusted. To get the most value out of this guarantee, we recommend dividing the computational labor with an untrusted host in mind. That is, other parties should not need to trust the host's output or operations in order to benefit from the work done in the zkVM.
+However, consider that code run in the RISC Zero zkVM can be shown to behave as expected even on a host that is entirely untrusted. 
+To get the most value out of this guarantee, we recommend dividing the computational labor with an untrusted host in mind. 
+That is, other parties should not need to trust the host's output or operations in order to benefit from the work done in the zkVM.
 </details>
 <br/>
 
@@ -128,9 +139,11 @@ If I want the guest to process large volumes of data during execution, I might b
  <br/>
  
 A:
-If data is loaded from the host to restrict guest program size, the most significant limitation on zkVM data processing is a constraint on instruction cycles. Loading data into the guest costs instruction cycles, as does data processing.
+If data is loaded from the host to restrict guest program size, the most significant limitation on zkVM data processing is a constraint on instruction cycles. 
+Loading data into the guest costs instruction cycles, as does data processing.
 
-There are workarounds for data limitations if the data is only included to ensure that its integrity becomes part of the proof of computation. If the data can be processed externally and simply needs to be verifiably unchanged, consider processing data externally and sending the guest a Merkle proof or (if no processing is needed) generating a SHA of a large dataset.
+There are workarounds for data limitations if the data is only included to ensure that its integrity becomes part of the proof of computation. 
+If the data can be processed externally and simply needs to be verifiably unchanged, consider processing data externally and sending the guest a Merkle proof or (if no processing is needed) generating a SHA of a large dataset.
 
 In the future, we plan to lift these processing limitations using continuations and recursion.
 </details>
@@ -153,6 +166,8 @@ I’d like to speed up the processing done inside the zkVM. What are my options?
 </summary>
 <br/>
 A:
-For cryptographic operations, it is possible to build ‘accelerator’ circuits such as our implementation of SHA26. Fast cryptography is sufficient to support many ‘DeFi’ applications. For many other applications, it is possible to perform most computation on the host (outside the zkVM) and then verify the results in the zkVM.
+For cryptographic operations, it is possible to build ‘accelerator’ circuits such as our implementation of SHA26. 
+Fast cryptography is sufficient to support many ‘DeFi’ applications. 
+For many other applications, it is possible to perform most computation on the host (outside the zkVM) and then verify the results in the zkVM.
 </details>
 <br/>

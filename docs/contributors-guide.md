@@ -13,23 +13,29 @@
 - You can suggest an edit directly via the `Edit this Page` button at the bottom of each page. 
 - To create a new page, you can use the [GitHub browser interface](https://www.github.com/risc0/website); the content is in `src/pages` and `docs`. 
   - Please read about [the navbar and sidebars](./contributors-guide.md/#navbar-and-sidebars) and [categories of documentation](./contributors-guide.md/#categories-of-documentation) before creating a new page.
-- If you want to clone the repository and work locally, you may want to check out the [Docusaurus documentation](https://docusaurus.io/docs/installation). We like to use `yarn start` to run a local build, especially when we're working with changes that involve links or sidebars. 
+- If you want to clone the repository and work locally, you may want to check out the [Docusaurus documentation](https://docusaurus.io/docs/installation). 
+We like to use `yarn start` to run a local build, especially when we're working with changes that involve links or sidebars. 
 
 ## Style Guidelines
 Our objective in organizing and creating website content is that anyone who finds their way to any RISC Zero content is able to rapidly find their way to the material suits their needs. 
 
 In order to achieve this objective, we rely on:
 
->- `Clear Purpose`: We aim for single-purpose docs, and we head each document with a succinct statement of purpose and pointers to related content. We use roadmaps, signposting, headings, and text formatting to guide the reader's attention toward the purpose of the doc. 
->- `Keep it Simple`: We write short sentences with minimal superflous language. We keep content digestible by splitting long docs into smaller chunks.
->- `Progressive Disclosure`: Our landing pages are simple and clear. Both at the level of site-organization and individual doc-organization, we present a bird's eye view first with opt-in paths toward higher levels of detail and technicality. 
+>- `Clear Purpose`: We aim for single-purpose docs, and we head each document with a succinct statement of purpose and pointers to related content. 
+We use roadmaps, signposting, headings, and text formatting to guide the reader's attention toward the purpose of the doc. 
+>- `Keep it Simple`: We write short sentences with minimal superflous language. 
+We keep content digestible by splitting long docs into smaller chunks.
+>- `Progressive Disclosure`: Our landing pages are simple and clear. 
+Both at the level of site-organization and individual doc-organization, we present a bird's eye view first with opt-in paths toward higher levels of detail and technicality. 
 >- `Lots of Pointers`: We keep materials succinct through extensive use of pointers on modular, single-purpose components. 
->- `Consistent and Accessible Terminology`: We are diligent about using our official terminology as defined and using precise language as much as possible. At the same time, we minimize our use of technical jargon, taking care to provide reference pages to pre-requisite knowledge as appropriate. 
+>- `Consistent and Accessible Terminology`: We are diligent about using our official terminology as defined and using precise language as much as possible. 
+At the same time, we minimize our use of technical jargon, taking care to provide reference pages to pre-requisite knowledge as appropriate. 
 
 ## Terminology Conventions
 [`RISC Zero Official Terminology`](./terminology)
 
-Our terminology and naming conventions are subject to ongoing evaluation, and we encourage conversation and questions on these topics. Please let us know via a [`GitHub issue`](https://github.com/risc0/website/issues) when you encounter terms that don't seem quite right. 
+Our terminology and naming conventions are subject to ongoing evaluation, and we encourage conversation and questions on these topics. 
+Please let us know via a [`GitHub issue`](https://github.com/risc0/website/issues) when you encounter terms that don't seem quite right. 
 
 ## Navbar and Sidebars
 - The navbar is defined in `docusaurus.config.js`. Any changes require manual configuration.
@@ -59,7 +65,8 @@ We typically organize reference docs according to the following sections; we use
 *Changes to this organization can be proposed for discussion via a [GitHub issue](https://github.com/risc0/website/issues) or proposed for action via a PR on this page.*
 
 ### Explainer Docs
-Our explainer docs are currently split into `zkVM Explainers` and `ZKP Explainers`. Explainers contain clearly articulated goals in the header, as well as pointers to related content. 
+Our explainer docs are currently split into `zkVM Explainers` and `ZKP Explainers`. 
+Explainers contain clearly articulated goals in the header, as well as pointers to related content. 
 
 ## Thank you! 
 We're excited about the engagement we've seen so far, and we're looking forward to building a vibrant community together.

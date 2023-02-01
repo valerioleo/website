@@ -15,7 +15,8 @@ Implementation and documentation for NTTs and iNTTs is in the `risc0-zkp-core` [
 >`iNTT(evaluations,field)=coefficients`
 
 ## Background
-NTTs are a [finite field](about-finite-fields.md) analog to Fourier transforms. Fourier transforms, FFTs, DFTs and NTTs are various methods of transforming a function from **evaluation form** to **coefficient form**. 
+NTTs are a [finite field](about-finite-fields.md) analog to Fourier transforms. 
+Fourier transforms, FFTs, DFTs and NTTs are various methods of transforming a function from **evaluation form** to **coefficient form**. 
 
 ### Coefficient Form 
 An array $(a_0,a_1,\ldots,a_{n-1})$ defines a degree $n-1$ polynomial, $f$, where $f(x)=a_0x^0+a_1x^1+\ldots,a_{n-1}x^{n-1}$
