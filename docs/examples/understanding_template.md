@@ -12,7 +12,7 @@ This tutorial will _not_ include:
 * How to create a project based on the starter template (see [Hello, Multiply](hello_multiply.md))
 * The cryptographic theory behind the RISC Zero zkVM (see our [proof system explainers and reference materials](../explainers))
 * The internal components of the RISC Zero zkVM (see our [Overview of the zkVM](../explainers/zkvm) article)
-* Design considerations for programs that use multiple RISC Zero zkVM guest methods as part of larger systems to accomplish complex tasks (see our [Battleship example](battleship_rust.md))
+* Design considerations for programs that use multiple RISC Zero zkVM guest methods as part of larger systems to accomplish complex tasks (see our [voting machine example](https://github.com/risc0/risc0-rust-examples/tree/main/voting-machine))
 
 ## Structure of a RISC Zero zkVM Program
 Like other virtual machines, the RISC Zero zkVM has both _host_ and _guest_ components. The guest component contains the code to be proven. The host component provides any required data to the guest, executes the guest code, and handles the guest's output.
@@ -22,8 +22,8 @@ In typical use cases, a RISC Zero zkVM program will actually be structured with 
 * Code that _builds_ the guest's source code into executable methods, and
 * Source code for the _host_, which will call these built methods.
 
-Each of these components uses its own associated RISC Zero crate:
-* The _guest_ code uses the [`risc0-zkvm-guest` crate](https://docs.rs/risc0-zkvm-guest/latest)
+The code for each of these components uses its own associated RISC Zero crate or module:
+* The _guest_ code uses the `guest` module of the [`risc0-zkvm` crate](https://docs.rs/risc0-zkvm/latest/risc0_zkvm/guest/index.html)
 * The _build_ code for building guest methods uses the [`risc0-build` crate](https://docs.rs/risc0-build/latest)
 * The _host_ code uses the [`risc0-zkvm` crate](https://docs.rs/risc0-zkvm/latest)
 
@@ -32,21 +32,20 @@ It is possible to organize the files for these components in various ways. Howev
 ```
 project_name
 ├── Cargo.toml
-├── methods
+├── host
 │   ├── Cargo.toml
-│   ├── build.rs                           <-- Build (embed) code goes here
-│   ├── guest
-│   │   ├── Cargo.toml
-│   │   ├── build.rs                       
-│   │   └── src
-│   │       └── bin
-│   │           └── method_name.rs         <-- Guest code goes here
 │   └── src
-│       └── lib.rs                         <-- Build (include) code goes here
-└── project_or_component_name
+│       └── main.rs                        <-- Host code goes here
+└── methods
     ├── Cargo.toml
+    ├── build.rs                           <-- Build (embed) code goes here
+    ├── guest
+    │   ├── Cargo.toml
+    │   └── src
+    │       └── bin
+    │           └── method_name.rs         <-- Guest code goes here
     └── src
-        └── main.rs                        <-- Host code goes here
+        └── lib.rs                         <-- Build (include) code goes here
 ```
 
 Now let's go through these three components in detail.
@@ -57,7 +56,7 @@ The guest code is the code the prover wants to demonstrate is faithfully execute
 #![no_std]
 #![no_main]
 
-risc0_zkvm_guest::entry!(main);
+risc0_zkvm::guest::entry!(main);
 
 pub fn main() {
     // TODO: Implement your guest code here
@@ -84,7 +83,7 @@ Here is the actual guest code. Notice that the function is named `main`, matchin
 
 ## Building Guest Methods
 
-The `risc0-build` crate has two functions, [`embed_methods`](https://docs.rs/risc0-build/latest/risc0_build/fn.embed_methods.html) and [`embed_methods_with_options`](https://docs.rs/risc0-build/latest/risc0_build/fn.embed_methods_with_options.html), which are used to build guest code into a method (or methods) that the host can call. Simple use cases have no need to do any customization for the build step, and you can just call these functions as described below. For more complex cases, it is sometimes useful to replace `embed_methods` with `embed_methods_with_options` (see the [FAQ](../faq.md#zkp-system) for an example where you might want to specify embedding options).
+The `risc0-build` crate has two functions, [`embed_methods`](https://docs.rs/risc0-build/latest/risc0_build/fn.embed_methods.html) and [`embed_methods_with_options`](https://docs.rs/risc0-build/latest/risc0_build/fn.embed_methods_with_options.html), which are used to build guest code into a method (or methods) that the host can call. Simple use cases have no need to do any customization for the build step, and you can just call these functions as described below. For more complex cases, it is sometimes useful to replace `embed_methods` with `embed_methods_with_options`.
 
 These functions are called at build time using [Cargo build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html). The resulting files with the built methods must then be included so that the host can depend on them.
 
@@ -107,7 +106,7 @@ include!(concat!(env!("OUT_DIR"), "/methods.rs"));
 Embedding depends on `risc0-build`. Since embedding happens in built scripts, Cargo needs to know they are _build_ dependencies. Therefore, in the methods directory cargo file (for embedding), we include
 ```
 [build-dependencies]
-risc0-build = "0.11"
+risc0-build = "0.12"
 ```
 (or adjust the version number if you want to use a different version of risc0).
 
@@ -122,32 +121,31 @@ Here `"guest"` is the relative path to the root of the directory with the guest 
 
 Now let's look at the host code need to execute the guest. The code in the template does not communicate with the guest or provide a method for sending the receipt to an external verifier. Let's look at the code first in full, then line by line:
 ```
-use methods::{METHOD_NAME_ID, METHOD_NAME_PATH};
-use risc0_zkvm::host::Prover;
+use methods::{METHOD_NAME_ELF, METHOD_NAME_ID};
+use risc0_zkvm::Prover;
 
 fn main() {
     // Make the prover.
-    let method_code = std::fs::read(METHOD_NAME_PATH)
-        .expect("Method code should be present at the specified path; did you use the correct *_PATH constant?");
-    let mut prover = Prover::new(&method_code, METHOD_NAME_ID)
-        .expect("Prover should be constructed from valid method source code and corresponding image ID");
+    let mut prover = Prover::new(METHOD_NAME_ELF, METHOD_NAME_ID).expect(
+        "Prover should be constructed from valid method source code and corresponding method ID",
+    );
 
     // Run prover & generate receipt
     let receipt = prover.run()
-        .expect("Valid code should be provable if it doesn't overflow the cycle limit. See `embed_methods_with_options` for information on adjusting maximum cycle count.");
+        .expect("Code should be provable unless it had an error or overflowed the maximum cycle count");
 
     // Optional: Verify receipt to confirm that recipients will also be able to verify your receipt
-    receipt.verify(METHOD_NAME_ID)
-        .expect("Code you have proven should successfully verify; did you specify the correct image ID?");
+    receipt.verify(METHOD_NAME_ID).expect(
+        "Code you have proven should successfully verify; did you specify the correct method ID?",
+    );
 }
-
 ```
 We start with use declarations
 ```
-use methods::{METHOD_NAME_ID, METHOD_NAME_PATH};
+use methods::{METHOD_NAME_ELF, METHOD_NAME_ID};
 use risc0_zkvm::host::Prover;
 ```
-For `Prover` this is straightforward, but the `methods` are coming from computer generated code. Specifically, the `methods.rs` [file you included earlier](#including) contains generated constants needed to call guest methods. For each [guest code file](#guest-code), two constants are generated: `<FILENAME>_ID` and `<FILENAME>_PATH` (where `<FILENAME>` is the name of the file rendered in all capital letters). The `<FILENAME>_ID` is a _image ID_, a cryptographic hash that will be committed to the receipt and allows you to convince a verifier that the code you proved is the same code you are showing to them. The `<FILENAME>_PATH` is a path to where your method was built.
+For `Prover` this is straightforward, but the `methods` are coming from computer generated code. Specifically, the `methods.rs` [file you included earlier](#including) contains generated constants needed to call guest methods. For each [guest code file](#guest-code), two constants are generated: `<FILENAME>_ELF` and `<FILENAME>_ID` (where `<FILENAME>` is the name of the file rendered in all capital letters). The `<FILENAME>_ID` is a _image ID_, a cryptographic hash that will be committed to the receipt and allows you to convince a verifier that the code you proved is the same code you are showing to them. The `<FILENAME>_ELF` is your compiled guest code (in ELF format).
 ```
 fn main() {
 ```
@@ -155,10 +153,9 @@ The host is executed directly, so this is the normal Rust `main` function.
 
 We will replace `expect`s with `unwrap`s in the following lines so we can focus on the core functionality:
 ```
-    let method_code = std::fs::read(METHOD_NAME_PATH).unwrap();
-    let mut prover = Prover::new(&method_code, METHOD_NAME_ID).unwrap();
+    let mut prover = Prover::new(METHOD_NAME_ELF, METHOD_NAME_ID).unwrap();
 ```
-This creates a prover, which can be run to execute its associated guest code and produce a receipt proving execution. It must be initialized with the contents of an ELF file of the code to be executed and with a image ID. These have be created in the build step, and can be accessed via the `<FILENAME>_PATH` and `<FILENAME>_ID` constants.
+This creates a prover, which can be run to execute its associated guest code and produce a receipt proving execution. It must be initialized with an image ID and with an ELF file with the code to be executed. These have be created in the build step, and can be accessed via the `<FILENAME>_ID` and `<FILENAME>_ELF` constants.
 ```
     let receipt = prover.run().unwrap();
 ```

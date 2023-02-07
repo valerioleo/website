@@ -45,21 +45,6 @@ module.exports = {
       ]
     },
     { type: 'category',
-      label: 'Digital Signatures',
-      items: [
-        {
-          type: 'doc',
-          label: 'Understanding Digital Signatures',
-          id: 'examples/digital_signatures',
-        },
-        {
-          type: 'link',
-          label: 'Digital Signatures Source',
-          href: 'https://github.com/risc0/risc0-rust-examples/tree/main/digital-signature',
-        }
-      ]
-    },
-    { type: 'category',
     label: 'Password Validity Checker',
     items: [
       {
@@ -76,8 +61,12 @@ module.exports = {
   },
     { 
       type: 'link',
-      label: 'RISC Zero Rust Crates',
-      href: 'https://github.com/risc0/risc0#rust-crates',
+      label: 'ZK Hack III Workshop',
+      href: 'https://youtu.be/wECQcmk-5ss',
+    },
+    { type: 'link',
+      label: 'Reference Documentation',
+      href: 'https://docs.rs/risc0-zkvm/latest/risc0_zkvm/',
     },
     { type: 'link',
       label: 'Contribute to RISC Zero',

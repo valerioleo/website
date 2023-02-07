@@ -28,7 +28,7 @@ The host driver program runs the guest zkVM. Most code written for the guest zkV
 When the host code executes, it creates a prover instance that is responsible for all guest zkVM interactions:
 
 ```
-    let mut prover = Prover::new(&std::fs::read(MULTIPLY_PATH).unwrap(), MULTIPLY_ID).unwrap();
+    let mut prover = Prover::new(MULTIPLY_ELF, MULTIPLY_ID).unwrap();
 ```
 
  The prover runs an ELF binary of the zkVM guest code. After the guest code has executed, the prover returns a [receipt](../explainers/proof-system/what_is_a_receipt.md). In our example, these are accomplished with the following line in the `factors/src/main.rs` host source code:
@@ -47,16 +47,14 @@ A hash of the journal is included in the cryptographic seal so that the recipien
 
 The diagram below shows these components in action:
 
-![](assets/fig1.png)
-<!--
 ```mermaid
 flowchart LR
-A(multiply.rs)-|compiles to an|->B(ELF binary)
-B-|Whose execution produces an|-> C(Execution trace)
-B-|Whose hash forms a unique|->D(Image ID)
-D-|That can be compared to the|->E(Cryptographic seal)
-C-|That, if valid,<br>generates a|->E(Cryptographic seal)
-B-|Whose operations can include<br>committing values to a|->F(Journal)
+A(multiply.rs)-->|compiles to an|B(ELF binary)
+B-->|Whose execution produces an|C(Execution trace)
+B-->|Whose hash forms a unique|D(Image ID)
+D-->|That can be compared to the|E(Cryptographic seal)
+C-->|That, if valid,<br>generates a|E(Cryptographic seal)
+B-->|Whose operations can include<br>committing values to a|F(Journal)
 subgraph Together, these form a receipt.
 E
 F
@@ -70,7 +68,6 @@ style x fill:none, stroke:none
 style H fill:none,stroke:none
 style I fill:none,stroke:none
 ```
--->
 
 For more details on this process, see our [zkVM Overview](https://www.risczero.com/docs/explainers/zkvm/); for maximal detail, see our [proof system sequence diagram](https://www.risczero.com/docs/explainers/proof-system/proof-system-sequence-diagram). In the next section, we'll show how this process is managed from the perspective of the host program, the guest zkVM program, and the prover object that we call from the host.
 
@@ -78,8 +75,6 @@ For more details on this process, see our [zkVM Overview](https://www.risczero.c
 
 The process diagram below shows the execution steps relevant to host and guest interactions. To illustrate the responsibility of the `prover`, we have included it as a separate entity. In practice, this object is instantiated on the host and lives in host memory.
 
-![](assets/fig2.png)
-<!--
 ```mermaid
 sequenceDiagram
 participant B as Recipient<br>(recipient)
@@ -106,7 +101,7 @@ H->>B: give receipt to recipient
 B->>B: recipient verifies receipt
 B->>B: recipient reads prime product<br>from receipt journal
 ```
--->
+
 Some of the steps described above are handled by [RISC Zero project code](https://github.com/risc0/risc0) (such as the `prover.run()` function); other steps are performed explicitly by host or guest code. For example, the values shown in the blue box are dictated by guest zkVM code (`multiply.rs`). Others, like verifying the execution trace and producing a receipt, are a part of our prover object's internally defined behavior.
 
 To get you started, the next section describes which actions must be explicitly included in host and guest code instructions. Read it along with the `main.rs` and `multiply.rs` files to get ready to create your own projects.

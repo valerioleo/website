@@ -91,13 +91,11 @@ const config = {
             position: 'right',
             label: 'GitHub',
           },
-/*
           {
             label: 'Mailing List',
             position: 'right',
             to: 'mailing',
           },
- */
          {
             type: 'dropdown',
             position: 'right',
@@ -113,7 +111,7 @@ const config = {
               },
               {
                 label: 'YouTube',
-                href: 'https://www.youtube.com/channel/UCGTjxHYsjntewyKue85u41A'
+                href: 'https://www.youtube.com/@risczero'
               },
               {
                 label: 'Stack Overflow',

@@ -1,16 +1,22 @@
 # "Hello, Multiply!": Write Your First Program for the RISC Zero zkVM
 
-In this guide, we'll be writing a program that demonstrates a number is composite and *we know its factors*. If you'd like to start with an under-the-hood explanation of what this program will do, we've written one [here](understanding-hello-multiply.md). To jump ahead and see the finished product, look in [this repository](https://github.com/risc0/risc0-rust-examples/). If you're ready to code, let's dive in!
+In this guide, we'll be writing a program that demonstrates a number is composite and *we know its factors*.
+If you'd like to start with an under-the-hood explanation of what this program will do, we've written one [here](understanding-hello-multiply.md).
+To jump ahead and see the finished product, look at the [factors example](https://github.com/risc0/risc0-rust-examples/tree/main/factors) in our examples repository.
+If you're ready to code, let's dive in!
 
 ## Step 1: Clone the template repository
 
-To get started, clone the [Rust starter template](https://github.com/risc0/risc0-rust-starter). (An explanation of the template code is [also available](understanding_template.md).) If you intend to publish your project, you should instead follow the [directions for creating a repository from a template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) on GitHub.
+To get started, clone the [Rust starter template](https://github.com/risc0/risc0-rust-starter).
+(An explanation of the template code is [also available](understanding_template.md).)
+If you intend to publish your project, you should instead follow the [directions for creating a repository from a template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) on GitHub.
 
 ## Step 2: Modify file names (and their references)
 
 ### Name the new project
 
-Let's give our "Hello, Multiply!" project a name. Rename the folder `host` to `factors`.
+Let's give our "Hello, Multiply!" project a name.
+Rename the folder `host` to `factors`.
 
 Update the corresponding workspace member entry in the top-level `Cargo.toml` file:
 ```
@@ -23,25 +29,27 @@ members = [
 
 ### Give the guest program a name
 
-This project will call a program that executes on the `guest zkVM`. It's currently named `methods/guest/src/bin/method_name.rs`. We want to name it something that represents what the guest program does -- let's call it `multiply.rs`.
+This project will call a program that executes on the `guest zkVM`.
+It's currently named `methods/guest/src/bin/method_name.rs`.
+We want to name it something that represents what the guest program does -- let's call it `multiply.rs`.
 
 In order to access this guest code from the host driver program, the host program `factors/src/main.rs` includes two guest methods:
 
 ```
-use methods::{METHOD_NAME_ID, METHOD_NAME_PATH};
+use methods::{METHOD_NAME_ELF, METHOD_NAME_ID};
 ```
 Both of these must be changed to reflect the new guest program name:
 ```
-use methods::{MULTIPLY_ID, MULTIPLY_PATH};
+use methods::{MULTIPLY_ELF, MULTIPLY_ID};
 ```
-(As an aside, if you add more than one callable guest program to your next RISC Zero zkVM project, you'll need to include these `ID` and `path` references once for each guest file.)
+(As an aside, if you add more than one callable guest program to your next RISC Zero zkVM project, you'll need to include these `ELF` and `ID` references once for each guest file.)
 
-While we're at it, let's change the rest of the references in `factors/src/main.rs`. Don't worry about why these lines are included yet; for now, we're just being diligent not to leave dead references behind. Here are the three lines, updated with `MULTIPLY_PATH`, `MULTIPLY_ID`, and `MULTIPLY_ID`, respectively:
+While we're at it, let's change the rest of the references in `factors/src/main.rs`.
+Don't worry about why these lines are included yet; for now, we're just being diligent not to leave dead references behind.
+Here are what the other two lines with `METHOD_NAME_ELF` and `METHOD_NAME_ID` should look like after updating:
 
 ```
-    let method_code = std::fs::read(MULTIPLY_PATH)
-        .expect("Method code should be present at the specified path; did you use the correct *_PATH constant?");
-    let mut prover = Prover::new(&method_code, MULTIPLY_ID)
+    let mut prover = Prover::new(MULTIPLY_ELF, MULTIPLY_ID)
         .expect("Prover should be constructed from valid method source code and corresponding image ID");
 
 ...
@@ -52,33 +60,43 @@ While we're at it, let's change the rest of the references in `factors/src/main.
 
 ### Intermission: Build and run the project!
 
-In the main project folder, build and run the project using `cargo run --release`. Nothing exciting should happen yet, but we'll know if any of the above changes were missed. Use this command any time you'd like to check your progress.
+In the main project folder, build and run the project using `cargo run --release`.
+Nothing exciting will happen yet, but it should give you an error if you made one of the above changes incorrectly.
+Use this command any time you'd like to check your progress.
 
 ## Step 3 (Host): Share two values with the guest
 
-In this step, we'll be continuing to modify `factors/src/main.rs`. Let's start by picking some aesthetically pleasing primes:
+In this step, we'll be continuing to modify `factors/src/main.rs`.
+Let's start by picking some aesthetically pleasing primes:
 ```
 fn main() {
     let a: u64 = 17;
     let b: u64 = 23;
 ```
 
-Currently, our host driver program creates and runs a prover. The `prover.run()` command will cause our guest program to execute:
+Currently, our host driver program creates and runs a prover.
+The `prover.run()` command will cause our guest program to execute:
 
 ```
-    let mut prover = Prover::new(&std::fs::read(MULTIPLY_PATH).unwrap(), MULTIPLY_ID).unwrap();
+    let mut prover = Prover::new(MULTIPLY_ELF, MULTIPLY_ID)
+        .expect("Prover should be constructed from valid method source code and corresponding image ID");
 
-    let receipt = prover.run().unwrap();
+    let receipt = prover.run()
+        .expect("Code should be provable unless it had an error or overflowed the maximum cycle count");
 ```
- We'd like the host to make the values of `a` and `b` available to the guest prior to execution. Because the prover is responsible for managing guest-readable memory, we need to share them after the prover is created. To accomplish this, let's send our two values to the guest between the lines listed above:
+ We'd like the host to make the values of `a` and `b` available to the guest prior to execution.
+ Because the prover is responsible for managing guest-readable memory, we need to share them after the prover is created.
+ To accomplish this, let's send our two values to the guest between the lines listed above:
 
  ```
-    let mut prover = Prover::new(&std::fs::read(MULTIPLY_PATH).unwrap(), MULTIPLY_ID).unwrap();
+    let mut prover = Prover::new(MULTIPLY_ELF, MULTIPLY_ID)
+        .expect("Prover should be constructed from valid method source code and corresponding image ID");
 
-    prover.add_input_u32_slice(to_vec(&a).unwrap().as_slice());
-    prover.add_input_u32_slice(to_vec(&b).unwrap().as_slice());
+    prover.add_input_u32_slice(&to_vec(&a).unwrap());
+    prover.add_input_u32_slice(&to_vec(&b).unwrap());
 
-    let receipt = prover.run().unwrap();
+    let receipt = prover.run()
+        .expect("Code should be provable unless it had an error or overflowed the maximum cycle count");
 ```
 
 Make sure to uncomment the `use risc0_zkvm::serde::{from_slice, to_vec};` line at the top of the file so that we can access the helper functions in the lines we just added.
@@ -86,9 +104,13 @@ Make sure to uncomment the `use risc0_zkvm::serde::{from_slice, to_vec};` line a
 
 ## Step 4 (Guest): Multiply two values and commit their result
 
-Now it's time to start writing guest code. Open the main guest program file `methods/guest/src/bin/multiply.rs`. In its final form, we'll tell the guest to read the values of `a` and `b` from the host and multiply them together. We'll then publicly commit their product to the `receipt` portion of the `journal`.
+Now it's time to start writing guest code.
+Open the main guest program file `methods/guest/src/bin/multiply.rs`.
+In its final form, we'll tell the guest to read the values of `a` and `b` from the host and multiply them together.
+We'll then publicly commit their product to the `receipt` portion of the `journal`.
 
-Here is the complete guest program. We'll break this down step by step below:
+Here is the complete guest program.
+We'll break this down step by step below:
 ```
 pub fn main() {
     // Load the first number from the host
@@ -131,14 +153,15 @@ Now we can compute their product and `commit` it. Once committed to the `journal
 For this step, we return to the main file for the host driver program at `factors/src/main.rs`, which currently ends with `receipt` generation after the prover runs:
 
 ```
-    let receipt = prover.run().unwrap();
+    let receipt = prover.run().unwrap()
+        .expect("Code should be provable unless it had an error or overflowed the maximum cycle count");
 ```
 
 Now that we have a value to read from the receipt, let's extract the journal's contents. Below the line above, add the following lines.
 
 ```
     // Extract journal of receipt (i.e. output c, where c = a * b)
-    let c: u64 = from_slice(receipt.journal.as_slice()).unwrap();
+    let c: u64 = from_slice(&receipt.journal).unwrap();
 
     // Print an assertion
     println!("Hello, world! I know the factors of {}, and I can prove it!", c);
